@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="modone">
     
     <head >
         <script src="js/libs/angular.min.js"></script>
@@ -11,9 +11,25 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body >
-
-                       
-        
+	
+    <body ng-controller="plan_control">
+	<div>
+        Diego y Daniela              
+        </div>
+	<button type="button" class="btn btn-success"  ng-click="loadData()">
+                Load
+        </button>
+	<select ng-model="blueprint">
+	    <option  ng-repeat="o in blueprints" value="{{o}}">
+	    {{o}}
+	    </option>
+	</select>
+	<button type="button" class="btn btn-success"  ng-click="ConsultarPlano()">
+               Draw
+        </button>
+	<div style="margin-left: 400px;">
+		Canvas
+	</div>
+	<canvas id="myCanvas" width="800" height="600" style="border:4px solid #000000;"></canvas>
     </body>
 </html>
