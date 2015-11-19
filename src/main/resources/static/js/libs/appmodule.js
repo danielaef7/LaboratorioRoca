@@ -1,42 +1,53 @@
 (function () {
     var app = angular.module('modone', []);
-    
-    app.controller('plan_control', 
-    	function($scope,$http){
-	  $scope.blueprints = [];
-	  $scope.blueprint;
 
-	  $scope.loadData = function() {
-	     var configList = {
-	  	 method: "GET",
-		 url: "blueprints"
-	     };
+    app.controller('plan_control',
+            function ($scope, $http) {
+                $scope.blueprints = [];
+                $scope.blueprint = {figura: "nombre"};
 
-	     var response=$http(configList);
+                $scope.loadData = function () {
+                    var configList = {
+                        method: "GET",
+                        url: "blueprints"
+                    };
 
-	     response.success(function(data, status, headers, config) {
-		 $scope.blueprints = data;
-	  });
+                    var response = $http(configList);
 
-	  response.error(function(data, status, headers, config) {
-	     alert("The petition has failed. HTTP Status:"+status);
-	  });
-	};
+                    response.success(function (data, status, headers, config) {
+                        $scope.blueprints = data;
+                    });
 
-	    $scope.ConsultarPlano = function(){
-	      var cnv= document.getElementById("myCanvas");
-	      var ctx = cnv.getContext("2d");
-		$http({
-		    method: "GET",
-		    url: "blueprints/"+$scope.blueprint
-		}).success(function(data) {
-		   $scope.entries = data;
-		}).error(function(data,status,headers,config) {
-	 	   alert("Ha fallado la petición. Estado HTTP:"+status);
-		});
-	    };
-	}
-    );	
+                    response.error(function (data, status, headers, config) {
+                        alert("The petition has failed. HTTP Status:" + status);
+                    });
+                };
+                $scope.loadData();
+
+                $scope.ConsultarPlano = function () {
+                    var configList = {
+                        method: "GET",
+                        url: "blueprints/" + $scope.blueprint.figura
+                    };
+                    var cnv = document.getElementById("myCanvas");
+                    var ctx = cnv.getContext("2d");
+                    
+                    var response = $http(configList);
+
+                    response.success(function (data, status, headers, config) {
+                        $scope.blueprints = data;
+                        var punto = data.points;
+                        
+                        for (i = 0; punto.length; i++) {
+                            ctx.moveTo(punto[i].x, punto[i].y);
+                            ctx.lineTo(punto[(i + 1) % punto.length].x, punto[(i + 1) % punto.length].y);
+                            ctx.stroke();
+                           
+                        }                       
+                    });
+                };
+            }
+    );
 })();
 
 
